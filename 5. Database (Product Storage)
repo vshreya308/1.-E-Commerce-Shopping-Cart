@@ -1,0 +1,20 @@
+import java.io.*;
+import java.util.*;
+
+public class Database {
+    private static final String PRODUCT_FILE = "products.txt";
+
+    public static List<Product> loadProducts() {
+        List<Product> products = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(PRODUCT_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                products.add(new Product(Integer.parseInt(parts[0]), parts[1], Double.parseDouble(parts[2])));
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading products.");
+        }
+        return products;
+    }
+}
