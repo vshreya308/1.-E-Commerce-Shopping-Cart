@@ -1,0 +1,33 @@
+import java.io.*;
+import java.util.*;
+
+public class Order {
+    private List<Product> items;
+    private double totalCost;
+    private String username;
+    private String date;
+
+    public Order(Cart cart, String username) {
+        this.items = new ArrayList<>(cart.getItems());
+        this.totalCost = cart.calculateTotal();
+        this.username = username;
+        this.date = new Date().toString();
+    }
+
+    public void saveOrder() {
+        try (FileWriter writer = new FileWriter("orders.txt", true)) {
+            writer.write(username + " | " + date + " | Total: $" + totalCost + "\n");
+            items.forEach(item -> {
+                try {
+                    writer.write(item.toString() + "\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            writer.write("\n");
+            System.out.println("Order placed successfully!");
+        } catch (IOException e) {
+            System.out.println("Error saving order.");
+        }
+    }
+}
